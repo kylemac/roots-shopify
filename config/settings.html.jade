@@ -1,0 +1,22 @@
+.section-info
+  :markdown
+    Theme settings allow designers to provide an easy way for any user to customize the look and feel of their shop without having to delve into HTML or CSS code. Please see our [help page on theme settings](http://wiki.shopify.com/Theme_Settings) to learn more about how you can make your theme customizable.
+
+//- Spacer
+.section-info: p
+
+fieldset
+  legend General
+  h3 Logo Options
+  table
+    tr
+      td: label(for="use_logo") Use Custom Logo?
+      td: input#use_logo(type="checkbox", name="use_logo")
+
+    tr
+      td: label(for="logo_image") Custom Logo
+      td: input#logo_image(type="file", name="logo.png", data-max-width="940", data-max-height="300")
+
+    tr
+      td(colspan="2")
+        small Maximum logo dimensions are 940px wide by 300px high. Your uploaded file will be resized to fit within those constraints. Need a full-width banner? Upload an image with a width of 940px, and a height of 300px or less.
