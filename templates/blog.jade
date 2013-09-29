@@ -1,0 +1,51 @@
+{% paginate blog.articles by 5 %}
+
+{% if current_tags %}
+h1 {{ blog.title | link_to: blog.url }} &raquo; {{ current_tags.first }}
+{% else %}
+h1 {{ blog.title }}
+{% endif %}
+
+ul
+
+  {% for article in blog.articles %}
+  li(class="blog-article{% if forloop.first %} first{% endif %}{% if forloop.last %} last{% endif %}")
+    h2.blog-article-title
+      a(href="{{ article.url }}") {{ article.title }}
+
+    h3.blog-article-date
+      time(pubdate, datetime="{{ article.published_at | date: '%Y-%m-%d' }}") {{ article.published_at | date: '%b %d, %Y' }}
+    .rte
+      {% if article.excerpt.size > 0 %}
+      {{ article.excerpt }}
+      {% else %}
+      p {{ article.content | strip_html | truncatewords: 100 }}
+      {% endif %}
+
+    a.blog-read-more(href="{{ article.url }}") Read more →
+    ul.blog-article-meta
+      {% if blog.comments_enabled? %}
+      li.blog-article-meta-comments
+        a(href="{{ article.url }}#comments") {{ article.comments_count }} {{ article.comments_count | pluralize: 'comment','comments' }}
+      {% endif %}
+      {% if article.tags.size > 0 %}
+
+      li.blog-article-meta-tags
+        span Filed under
+        {% for tag in article.tags %} 
+        a(href="{{ blog.url }}/tagged/{{ tag | handle }}") {{ tag }}
+        {% unless forloop.last %}, {% endunless %}
+        {% endfor %}
+      {% endif %}
+  {% endfor %}
+
+  
+{% if paginate.pages > 1 %}
+#pagination
+  //- 
+    When paginating blog articles, a previous article is actually a newer article, not an older one, because blog articles are shown and paginated in a reversed chronological order. The word 'previous' can be confusing, hence we'll change it.
+  
+  {{ paginate | default_pagination | replace: 'Previous', 'Newer articles' | replace: 'Next', 'Older articles' }}
+{% endif %}
+
+{% endpaginate %}
