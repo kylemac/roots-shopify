@@ -11,7 +11,7 @@ ignore_folders: ['.git']
 # templates: 'views/templates'
 
 # Update this value to the slug-name of your project
-output_folder: 'store-name'  
+output_folder: 'public' # you may also want to add this to your .gitignore   
 
 # Do not change
 folder_config:
