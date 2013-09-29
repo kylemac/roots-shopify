@@ -1,5 +1,5 @@
 # Files in this list will not be compiled - minimatch supported
-ignore_files: ['_*', 'readme*', '.gitignore', '.DS_Store', 'LICENSE']
+ignore_files: ['_*', 'readme*', '.gitignore', '.DS_Store', 'LICENSE', 'node_modules', 'package.json']
 ignore_folders: ['.git']
 
 # Locals will be made available on every page. They can be
@@ -11,7 +11,7 @@ ignore_folders: ['.git']
 # templates: 'views/templates'
 
 # Update this value to the slug-name of your project
-output_folder: 'public'  
+output_folder: 'store-name'  
 
 # Do not change
 folder_config:
