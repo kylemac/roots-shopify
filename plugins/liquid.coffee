@@ -1,4 +1,5 @@
 jade = require("jade")
+liquid = require("tinyliquid")
 
 exports.settings =
   file_type: "jade"
@@ -14,4 +15,6 @@ exports.compile = (file, cb) ->
     )
   catch err
     error = err
+
+  # TODO: Utilize tinyliquid to verify liquid templates have compiled w/o error
   cb error, compiled

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "jade": "0.35.x",
-    "marked": "0.2.x"
+    "marked": "0.2.x",
+    "tinyliquid": "0.2.x"
   }
 }
