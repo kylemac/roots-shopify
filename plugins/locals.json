@@ -1,0 +1,16 @@
+{
+  "blog": 
+    {
+      "id": "123",
+      "handle": "foobar",
+      "articles": "foo",
+      "articles_count": "foo",
+      "url": "http://example.com/",
+      "comments_enabled?": true,
+      "moderated?": true,
+      "all_tags": "foo",
+      "tags": "foo",
+      "previous_article": "foo",
+      "next_article": "foo"
+    }
+}

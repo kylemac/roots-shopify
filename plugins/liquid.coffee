@@ -1,5 +1,6 @@
 jade = require("jade")
 liquid = require("tinyliquid")
+locals = require("./locals.json")
 
 exports.settings =
   file_type: "jade"
@@ -13,8 +14,18 @@ exports.compile = (file, cb) ->
       pretty: not global.options.compress
       filename: file.path
     )
+    
+    # Verify Liquid Templating
+    # ========================
+    # html = compiled(file.contents)
+    # render = liquid.compile(html)
+    # context = liquid.newContext(locals: {})
+    # render context, (err) ->
+    #   console.log err
+    #   console.log context.getBuffer()
+
   catch err
     error = err
 
-  # TODO: Utilize tinyliquid to verify liquid templates have compiled w/o error
+  # console.log locals 
   cb error, compiled
