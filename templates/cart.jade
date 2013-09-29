@@ -1,0 +1,103 @@
+h1 Shopping Cart
+  
+{% if cart.item_count > 0 %}
+
+form(action="/cart", method="post")
+  
+  table
+    thead
+      tr
+        th Item
+        th &nbsp;
+        th Price
+        th Quantity
+        th Total
+        th &nbsp;
+    
+    tbody
+
+    {% for item in cart.items %}    
+    
+    //- 
+      Determining the handle of the collection that was last seen for the 'continue shopping' link.
+    
+    
+    {% if forloop.first %}
+    {% assign collection_url = item.product.collections.first.url %}
+    {% if collection_url == '/collections/frontpage' or collection_url == '' %}{% assign collection_url = '/collections/all' %}{% endif %}
+    {% endif %}
+
+    tr
+      td
+        a(href="{{ item.product.url | within: collections.all }}") 
+          img(src="{{ item.product.featured_image.src | product_img_url: 'compact' }}", alt="{{ item.title | escape }}")
+      
+      td
+        h2
+          a(href="{{ item.product.url | within: collections.all }}") {{ item.title }}
+          {% if item.product.variants.size == 1 %}
+          {% unless item.variant.title contains 'Default' %} - {{ item.variant.title }}
+          {% endunless %}
+          {% endif %}
+
+        //- 
+          Line Item Properties
+
+        {% if item.properties.size > 0 %}
+        p
+          {% for p in item.properties %}
+          {% unless p.last == blank %}
+          {{ p.first }}:
+          {% if p.last contains '/uploads/' %}
+          a(href="{{ p.last }}") {{ p.last | split: '/' | last }}
+          {% else %}
+          {{ p.last }}
+          {% endif %}
+          br
+          {% endunless %}
+          {% endfor %}
+        {% endif %}
+        h3 {{ item.vendor }}
+      td {{ item.price | money }}
+      td
+        input(type="number", name="updates[]", id="updates_{{ item.id }}", value="{{ item.quantity }}")
+      td {{ item.line_price | money }}
+      td
+        a(href="/cart/change?line={{ forloop.index }}&quantity=0") Remove
+    {% endfor %}
+    
+  
+  //- 
+    For the checkout and update buttons to work, they need to use a name attribute set to 'checkout' and 'update', respectively. That's case-sensitive.
+  
+  div
+    h3 Subtotal 
+      em {{ cart.total_price | money }}
+
+    a(href="{{ collection_url }}") Continue shopping
+    span.or or
+    input(type="submit", name="update", value="Update cart")
+    span.or or
+    input(type="submit", name="checkout", value="Check out")  
+    {% comment %}Paypal and Google checkout buttons{% endcomment %}
+    {% if additional_checkout_buttons %}
+    p.additional-checkout-buttons
+      {{ content_for_additional_checkout_buttons }}
+    {% endif %}    
+  
+  //- 
+    For the special instructions to be submitted with order, they need to use a name attribute set to 'note'. That's case-sensitive.
+
+  div
+    p Special instructions for seller
+    textarea(name="note") {{ cart.note }}
+
+
+{% else %}
+
+div
+  :markdown
+    ## It appears that your cart is currently empty!
+    ### You can continue browsing [here](/collections/all)
+
+{% endif %}
