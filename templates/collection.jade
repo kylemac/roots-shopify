@@ -1,0 +1,64 @@
+//- 
+  Important notes about pagination:
+  - Never access collection.products before the opening paginate tag.
+  - Never paginate by more than 50.
+
+{% paginate collection.products by 6 %}
+
+//- 
+  Re-use the 'rte' class wherever you output content that was added by a merchant using the Rich Text Editor ( 'rte' stands for rich text editor ). Style all HTML elements in that content the same way across the board. Use the 'rte' class in your CSS to help maintain that consistency. Example: the h2 element should have the same size and color in:
+  - product descriptions
+  - collection descriptions
+  - 'page' pages' content
+  - blog post
+
+h1 {{ collection.title }}
+
+//- 
+  Listing all tags within the current collection. Shopify uses product tags to manage subcategories inside collections. See 'How do I create subcategories of products?' at  http://support.shopify.com/customer/portal/articles/75425 for details.
+
+{% if collection.all_tags.size > 0 %}
+ul.collection-sub-categories.clearfix
+  li(class="{% unless current_tags %}active{% endunless %}")
+    {% if collection.handle %}
+    {% comment %}Good for /collections/all collection and regular collections{% endcomment %}
+    a(href="/collections/{{ collection.handle }}") All
+    {% comment %}Good for automatic type collections{% endcomment %}
+    {% elsif collection.products.first.type == collection.title %}
+    a(href="{{ collection.title | url_for_type }}") All
+    {% comment %}Good for automatic vendor collections{% endcomment %}
+    {% elsif collection.products.first.vendor == collection.title %}
+    a(href="{{ collection.title | url_for_vendor }}") All
+    {% endif %}
+
+  {% for tag in collection.all_tags %}
+  {% if current_tags contains tag %}
+  li.active
+    {{ tag | link_to_remove_tag: tag }}
+
+  {% else %}
+  li
+    {{ tag | link_to_tag: tag }}
+
+  {% endif %}
+  {% endfor %}  
+{% endif %}
+
+{% if collection.description.size > 0 %}
+.rte
+  {{ collection.description }}
+{% endif %}
+
+ul.grid.clearfix
+  {% for product in collection.products %}
+  {% include 'product-grid-item' with 'three-per-row' %}
+  {% else %}
+  p There are no products in this view.
+  {% endfor %}
+
+{% if paginate.pages > 1 %}
+#pagination
+  {{ paginate | default_pagination }}
+{% endif %}
+
+{% endpaginate %}
